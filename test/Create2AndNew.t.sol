@@ -11,8 +11,14 @@ contract Create2AndNewTest is Test {
         create2AndNew = new Create2AndNew();
     }
 
-    function test_deployTestContractWithCreate() public {
-        (address addr1, address addr2) = create2AndNew.deployValueWithNewAndCreate();
+    // function test_deployTestContractWithCreate() public {
+    //     (address addr1, address addr2) = create2AndNew.deployValueWithNewAndCreate();
+    //     assertEq(addr1, addr2, "address is not equal");
+    // }
+
+    function test_deployTestContractWithCreate2() public {
+        (address addr1, address addr2) = create2AndNew.deployValueWithNewAndCreate2();
         assertEq(addr1, addr2, "address is not equal");
+        assertEq(addr1, address(0xE61DD39dCC9b1C597aeC6d0dBAC910581503221f), "address is not equal");
     }
 }

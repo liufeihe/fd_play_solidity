@@ -26,9 +26,27 @@ contract Create2AndNew {
     }
 
     // 提前获取使用create2部署合约，形成的地址
-    function calculateCreateAddress(address deployer, uint256 nonce) public pure returns (address) {
-        bytes32 hash = keccak256(abi.encodePacked(deployer, nonce));
+    function calculateCreateAddress(address deployer, uint256 nounce) public pure returns (address) {
+        bytes32 hash = keccak256(abi.encodePacked(
+            deployer, 
+            nounce
+        ));
         return address(uint160(uint(hash)));
+    }
+
+    function deployValueWithNewAndCreate2() public returns (address addr1, address addr2) {
+        uint256 arg = 1;
+        bytes32 salt = keccak256(abi.encodePacked(arg));
+        
+        ValueTest v = new ValueTest{salt: salt}(arg);
+        addr1 = address(v);
+
+        bytes memory byteCode = abi.encodePacked(
+            type(ValueTest).creationCode,
+            abi.encode(arg)
+        );
+
+        addr2 = calculateCreate2Address(address(this), byteCode, salt);
     }
 
     // 使用create2部署
@@ -40,8 +58,13 @@ contract Create2AndNew {
     }
 
     // 提前获取使用create2部署合约，形成的地址
-    function calculateCreate2Address(address deployer, uint256 nonce) public pure returns (address) {
-        bytes32 hash = keccak256(abi.encodePacked(deployer, nonce));
+    function calculateCreate2Address(address deployer, bytes memory byteCode, bytes32 salt) public pure returns (address) {
+        bytes32 hash = keccak256(abi.encodePacked(
+            bytes1(0xff),
+            deployer,
+            salt,
+            keccak256(byteCode)
+        ));
         return address(uint160(uint(hash)));
     }
 }
