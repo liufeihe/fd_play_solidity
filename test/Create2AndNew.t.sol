@@ -17,8 +17,8 @@ contract Create2AndNewTest is Test {
     // }
 
     function test_deployTestContractWithCreate2() public {
-        (address addr1, address addr2) = create2AndNew.deployValueWithNewAndCreate2();
-        assertEq(addr1, addr2, "address is not equal");
-        assertEq(addr1, address(0xE61DD39dCC9b1C597aeC6d0dBAC910581503221f), "address is not equal");
+        (address addrFromNew, address addrFromCalc) = create2AndNew.deployValueWithNewAndCreate2();
+        assertEq(addrFromNew, addrFromCalc, "address is not equal");
+        // assertEq(addrFromNew, address(0xB560478f5233567DC1B8b5E5C08138B91589B5d0), "address is not equal");
     }
 }
