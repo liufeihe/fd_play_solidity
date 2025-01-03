@@ -11,14 +11,25 @@ contract Create2AndNewTest is Test {
         create2AndNew = new Create2AndNew();
     }
 
-    // function test_deployTestContractWithCreate() public {
-    //     (address addr1, address addr2) = create2AndNew.deployValueWithNewAndCreate();
-    //     assertEq(addr1, addr2, "address is not equal");
-    // }
-
-    function test_deployTestContractWithCreate2() public {
-        (address addrFromNew, address addrFromCalc) = create2AndNew.deployValueWithNewAndCreate2();
+    function test_deployValueWithNew() public {
+        uint256 args = 1;
+        (address addrFromNew, address addrFromCalc) = create2AndNew.deployValueWithNew(args);
+        console.log("addrFromNew", addrFromNew);
+        console.log("addrFromCalc", addrFromCalc);
         assertEq(addrFromNew, addrFromCalc, "address is not equal");
-        // assertEq(addrFromNew, address(0xB560478f5233567DC1B8b5E5C08138B91589B5d0), "address is not equal");
+    }
+
+    function test_deployWithCreate2() public {
+        uint256 args = 1;
+        bytes memory bytecode = abi.encodePacked(
+            vm.getCode("Create2AndNew.sol:ValueTest"), 
+            abi.encode(args)
+        );
+        // bytes32 salt = keccak256(abi.encodePacked(abi.encode(args)));
+        bytes32 salt = keccak256(abi.encodePacked(args));
+        (address addr, address addrFromCalc) = create2AndNew.deployWithCreate2(bytecode, salt);
+        console.log("addr", addr);
+        console.log("addrFromCalc", addrFromCalc);
+        assertEq(addr, addrFromCalc, "address is not equal");
     }
 }

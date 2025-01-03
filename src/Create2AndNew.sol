@@ -34,29 +34,29 @@ contract Create2AndNew {
         return address(uint160(uint(hash)));
     }
 
-    function deployValueWithNewAndCreate2() public returns (address addrFromNew, address addrFromCalc) {
-        uint256 arg = 1;
-        bytes32 salt = keccak256(abi.encodePacked(arg));
+    function deployValueWithNew(uint256 val) public returns (address addrFromNew, address addrFromCalc) {
+        bytes32 salt = keccak256(abi.encodePacked(val));
         
-        ValueTest v = new ValueTest{salt: salt}(arg);
+        // 使用带salt的new
+        ValueTest v = new ValueTest{salt: salt}(val);
         addrFromNew = address(v);
 
+        // 通过bytecode和salt计算合约地址
         bytes memory byteCode = abi.encodePacked(
             type(ValueTest).creationCode,
-            abi.encode(arg)
+            abi.encode(val)
         );
-
         addrFromCalc = calculateCreate2Address(address(this), byteCode, salt);
-
-        // addrFromCreate2 = deployWithCreate2(byteCode, salt);
     }
 
     // 使用create2部署
-    function deployWithCreate2(bytes memory byteCode, bytes32 salt) public returns (address addr) {
+    function deployWithCreate2(bytes memory byteCode, bytes32 salt) public returns (address addr, address addrFromCalc ) {
         assembly {
             addr := create2(0, add(byteCode, 0x20), mload(byteCode), salt)
         }
         require(addr != address(0), "deployment failed");
+
+        addrFromCalc = calculateCreate2Address(address(this), byteCode, salt);
     }
 
     // 提前获取使用create2部署合约，形成的地址
