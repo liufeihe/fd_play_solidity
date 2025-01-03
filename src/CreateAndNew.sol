@@ -14,7 +14,6 @@ contract CreateAndNew {
     function deployValueWithNew(uint256 val) public returns (address addrFromNew, address addrFromCalc) {
         ValueTest v = new ValueTest(val);
         addrFromNew = address(v);
-
         addrFromCalc = calculateCreateAddress(address(this), 0);
     }
 

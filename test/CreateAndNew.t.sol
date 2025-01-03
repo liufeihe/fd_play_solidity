@@ -22,7 +22,7 @@ contract CreateAndNewTest is Test {
     function test_deployWithCreate() public {
         uint256 args = 1;
         bytes memory bytecode = abi.encodePacked(
-            vm.getCode("Create2AndNew.sol:ValueTest"), 
+            vm.getCode("CreateAndNew.sol:ValueTest"), 
             abi.encode(args)
         );
         (address addr, address addrFromCalc) = createAndNew.deployWithCreate(bytecode);
