@@ -26,6 +26,7 @@ $ forge build
 ```shell
 $ forge test
 $ forge test -vv
+$ forge test --match-path test/CreateAndNew.t.sol -vv
 ```
 
 ### Format
