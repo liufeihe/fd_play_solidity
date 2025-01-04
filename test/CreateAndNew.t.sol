@@ -16,7 +16,7 @@ contract CreateAndNewTest is Test {
         (address addrFromNew, address addrFromCalc) = createAndNew.deployValueWithNew(args);
         console.log("addrFromNew", addrFromNew);
         console.log("addrFromCalc", addrFromCalc);
-        // assertEq(addrFromNew, addrFromCalc, "address is not equal");
+        assertEq(addrFromNew, addrFromCalc, "address is not equal");
     }
 
     function test_deployWithCreate() public {
@@ -28,6 +28,6 @@ contract CreateAndNewTest is Test {
         (address addr, address addrFromCalc) = createAndNew.deployWithCreate(bytecode);
         console.log("addr", addr);
         console.log("addrFromCalc", addrFromCalc);
-        // assertEq(addr, addrFromCalc, "address is not equal");
+        assertEq(addr, addrFromCalc, "address is not equal");
     }
 }
